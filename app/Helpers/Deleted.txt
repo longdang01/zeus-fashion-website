@@ -1,0 +1,4 @@
+// const sizeTable = $('.size__table-upload');
+    // sizeTable.on('change', function(e) {
+    //     readUrl(this, '.size__table-picture');
+    // })

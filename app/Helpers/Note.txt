@@ -1,0 +1,106 @@
+//make models and controllers
+php artisan make:model BigCategory
+php artisan make:model Brand
+php artisan make:model Cart
+php artisan make:model CartDetail
+php artisan make:model Category
+php artisan make:model Color
+php artisan make:model Customer
+php artisan make:model Discount
+php artisan make:model Image
+php artisan make:model Invoice
+php artisan make:model InvoiceDetail
+php artisan make:model News
+php artisan make:model Orders
+php artisan make:model OrdersDetail
+php artisan make:model Payment
+php artisan make:model Position
+php artisan make:model Price
+php artisan make:model Product
+php artisan make:model Role
+php artisan make:model Size
+php artisan make:model Staff
+php artisan make:model SubCategory
+php artisan make:model Supplier
+php artisan make:model Transport
+php artisan make:model Users
+
+php artisan make:controller Api/BigCategoryController --resource
+php artisan make:controller Api/BrandController --resource
+php artisan make:controller Api/CartController --resource
+php artisan make:controller Api/CartDetailController --resource
+php artisan make:controller Api/CategoryController --resource
+php artisan make:controller Api/ColorController --resource
+php artisan make:controller Api/CustomerController --resource
+php artisan make:controller Api/DiscountController --resource
+php artisan make:controller Api/ImageController --resource
+php artisan make:controller Api/InvoiceController --resource
+php artisan make:controller Api/InvoiceDetailController --resource
+php artisan make:controller Api/NewsController --resource
+php artisan make:controller Api/OrdersController --resource
+php artisan make:controller Api/OrdersDetailController --resource
+php artisan make:controller Api/PaymentController --resource
+php artisan make:controller Api/PositionController --resource
+php artisan make:controller Api/PriceController --resource
+php artisan make:controller Api/ProductController --resource
+php artisan make:controller Api/RoleController --resource
+php artisan make:controller Api/SizeController --resource
+php artisan make:controller Api/StaffController --resource
+php artisan make:controller Api/SubCategoryController --resource
+php artisan make:controller Api/SupplierController --resource
+php artisan make:controller Api/TransportController --resource
+php artisan make:controller Api/UsersController --resource
+
+
+
+
+
+
+
+//reset database empty
+DELETE FROM brand;
+ALTER TABLE brand AUTO_INCREMENT = 1;
+DELETE FROM cart;
+ALTER TABLE cart AUTO_INCREMENT = 1;
+DELETE FROM cart_detail;
+ALTER TABLE cart_detail AUTO_INCREMENT = 1;
+DELETE FROM category;
+ALTER TABLE category AUTO_INCREMENT = 1;
+DELETE FROM color;
+ALTER TABLE color AUTO_INCREMENT = 1;
+DELETE FROM customer;
+ALTER TABLE customer AUTO_INCREMENT = 1;
+DELETE FROM invoice;
+ALTER TABLE invoice AUTO_INCREMENT = 1;
+DELETE FROM invoice_detail;
+ALTER TABLE invoice_detail AUTO_INCREMENT = 1;
+DELETE FROM news;
+ALTER TABLE news AUTO_INCREMENT = 1;
+DELETE FROM orders;
+ALTER TABLE orders AUTO_INCREMENT = 1;
+DELETE FROM orders_detail;
+ALTER TABLE orders_detail AUTO_INCREMENT = 1;
+DELETE FROM payment;
+ALTER TABLE payment AUTO_INCREMENT = 1;
+DELETE FROM position;
+ALTER TABLE position AUTO_INCREMENT = 1;
+DELETE FROM price;
+ALTER TABLE price AUTO_INCREMENT = 1;
+DELETE FROM product;
+ALTER TABLE product AUTO_INCREMENT = 1;
+DELETE FROM promotion;
+ALTER TABLE promotion AUTO_INCREMENT = 1;
+DELETE FROM role;
+ALTER TABLE role AUTO_INCREMENT = 1;
+DELETE FROM size;
+ALTER TABLE size AUTO_INCREMENT = 1;
+DELETE FROM staff;
+ALTER TABLE staff AUTO_INCREMENT = 1;
+DELETE FROM sub_category;
+ALTER TABLE sub_category AUTO_INCREMENT = 1;
+DELETE FROM supplier;
+ALTER TABLE supplier AUTO_INCREMENT = 1;
+DELETE FROM transport;
+ALTER TABLE transport AUTO_INCREMENT = 1;
+DELETE FROM users;
+ALTER TABLE users AUTO_INCREMENT = 1;
