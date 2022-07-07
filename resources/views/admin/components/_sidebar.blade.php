@@ -1,4 +1,6 @@
-<nav class="side-nav">
+
+
+<nav class="side-nav" ng-controller="LoginController">
     <a href="" class="intro-x d-flex align-items-center ps-5 pt-4">
         <img alt="Rubick Tailwind HTML Admin Template" class="w-6" src="/assets/admin/dist/images/logo.svg">
         <span class="d-none d-xl-block text-white fs-lg ms-3"> Zeus. </span>
@@ -6,7 +8,9 @@
     <div class="side-nav__devider my-6"></div>
     <ul>
         <li>
-            <a href="javascript:;" class="side-menu side-menu--active side-menu--open">
+            <a href="/admin/dashboards" 
+            class="side-menu side-menu--open"
+            ng-class="getClass('/admin/dashboards')">
                 <div class="side-menu__icon"> <i data-feather="home"></i> </div>
                 <div class="side-menu__title">
                     Bảng Điều Khiển 
@@ -14,263 +18,128 @@
                 </div>
             </a>
         </li>
-        <li>
-            <a href="javascript:;.html" class="side-menu side-menu--open">
+        <li ng-cloak ng-if="checkPermission('nhập hàng', groupImport)" class="side-nav__devider my-6"></li>
+        <li ng-cloak ng-if="checkPermission('nhập hàng', groupImport)">
+            <a href="javascript:;.html" class="side-menu side-menu--open"
+            ng-class="getClass(null, groupImport)">
                 <div class="side-menu__icon"> <i data-feather="box"></i> </div>
                 <div class="side-menu__title">
-                    Quản Lý
+                    Nhập Hàng
                     <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
                 </div>
             </a>
             <ul class="side-menu__sub-open">
                 <li>
-                    <a href="/admin/products" class="side-menu">
+                    <a href="/admin/products" class="side-menu"
+                    ng-class="getClass('/admin/products')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
                         <div class="side-menu__title"> Sản Phẩm </div>
                     </a>
                 </li>
                 <li>
-                    <a href="/admin/categories" class="side-menu">
+                    <a href="/admin/categories" class="side-menu"
+                    ng-class="getClass('/admin/categories')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
                         <div class="side-menu__title"> Danh Mục </div>
                     </a>
                 </li>
                 <li>
-                    <a href="/admin/suppliers" class="side-menu">
+                    <a href="/admin/brands" class="side-menu"
+                    ng-class="getClass('/admin/brands')">
+                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
+                        <div class="side-menu__title"> Thương hiệu </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/suppliers" class="side-menu"
+                    ng-class="getClass('/admin/suppliers')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
                         <div class="side-menu__title"> Nhà Cung Cấp </div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="side-nav__devider my-6"></li>
-        <li>
-            <a href="javascript:;.html" class="side-menu">
-                <div class="side-menu__icon"> <i data-feather="inbox"></i> </div>
+        <li ng-cloak ng-if="checkPermission('bán hàng', groupSell)" class="side-nav__devider my-6"></li>
+        <li ng-cloak ng-if="checkPermission('bán hàng', groupSell)">
+            <a href="javascript:;.html" class="side-menu side-menu--open"
+            ng-class="getClass(null, groupSell)">
+                <div class="side-menu__icon"> <i data-feather="box"></i> </div>
                 <div class="side-menu__title">
-                    Components 
+                    Bán Hàng
                     <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
                 </div>
             </a>
-            <ul class="">
+            <ul class="side-menu__sub-open">
                 <li>
-                    <a href="javascript:;.html" class="side-menu">
+                    <a href="/admin/orders" class="side-menu"
+                    ng-class="getClass('/admin/orders')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title">
-                            Table 
-                            <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
-                        </div>
-                    </a>
-                    <ul class="">
-                        <li>
-                            <a href="side-menu-light-regular-table.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Regular Table</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-tabulator.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Tabulator</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:;.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title">
-                            Overlay 
-                            <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
-                        </div>
-                    </a>
-                    <ul class="">
-                        <li>
-                            <a href="side-menu-light-modal.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Modal</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-slide-over.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Slide Over</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-notification.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Notification</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="side-menu-light-accordion.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Accordion </div>
+                        <div class="side-menu__title"> Đơn Hàng </div>
                     </a>
                 </li>
                 <li>
-                    <a href="side-menu-light-button.html" class="side-menu">
+                    <a href="/admin/payments" class="side-menu"
+                    ng-class="getClass('/admin/payments')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Button </div>
+                        <div class="side-menu__title"> Thanh Toán </div>
                     </a>
                 </li>
                 <li>
-                    <a href="side-menu-light-alert.html" class="side-menu">
+                    <a href="/admin/transports" class="side-menu"
+                    ng-class="getClass('/admin/transports')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Alert </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-progress-bar.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Progress Bar </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-tooltip.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Tooltip </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-dropdown.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Dropdown </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-typography.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Typography </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-icon.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Icon </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-loading-icon.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Loading Icon </div>
+                        <div class="side-menu__title"> Vận Chuyển </div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li>
-            <a href="javascript:;.html" class="side-menu">
-                <div class="side-menu__icon"> <i data-feather="sidebar"></i> </div>
+        <li ng-cloak ng-if="checkPermission('admin', groupUsers)" class="side-nav__devider my-6"></li>
+        <li ng-cloak ng-if="checkPermission('admin', groupUsers)">
+            <a href="javascript:;.html" class="side-menu side-menu--open"
+            ng-class="getClass(null, groupUsers)">
+                <div class="side-menu__icon"> <i data-feather="box"></i> </div>
                 <div class="side-menu__title">
-                    Forms 
+                    Người Dùng
                     <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
                 </div>
             </a>
-            <ul class="">
+            <ul class="side-menu__sub-open">
                 <li>
-                    <a href="side-menu-light-regular-form.html" class="side-menu">
+                    <a href="/admin/staffs" class="side-menu"
+                    ng-class="getClass('/admin/staffs')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Regular Form </div>
+                        <div class="side-menu__title"> Nhân Viên </div>
                     </a>
                 </li>
                 <li>
-                    <a href="side-menu-light-datepicker.html" class="side-menu">
+                    <a href="/admin/roles" class="side-menu"
+                    ng-class="getClass('/admin/roles')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Datepicker </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-tom-select.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Tom Select </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-file-upload.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> File Upload </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title">
-                            Wysiwyg Editor 
-                            <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
-                        </div>
-                    </a>
-                    <ul class="">
-                        <li>
-                            <a href="side-menu-light-wysiwyg-editor-classic.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Classic</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-wysiwyg-editor-inline.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Inline</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-wysiwyg-editor-balloon.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Balloon</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-wysiwyg-editor-balloon-block.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Balloon Block</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="side-menu-light-wysiwyg-editor-document.html" class="side-menu">
-                                <div class="side-menu__icon"> <i data-feather="zap"></i> </div>
-                                <div class="side-menu__title">Document</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="side-menu-light-validation.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Validation </div>
+                        <div class="side-menu__title"> Vai Trò </div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li>
-            <a href="javascript:;.html" class="side-menu">
-                <div class="side-menu__icon"> <i data-feather="hard-drive"></i> </div>
+        <li ng-cloak ng-if="checkPermission('nội dung', groupUtilities)" class="side-nav__devider my-6"></li>
+        <li ng-cloak ng-if="checkPermission('nội dung', groupUtilities)">
+            <a href="javascript:;.html" class="side-menu side-menu--open"
+            ng-class="getClass(null, groupUtilities)">
+                <div class="side-menu__icon"> <i data-feather="box"></i> </div>
                 <div class="side-menu__title">
-                    Widgets 
+                    Nội dung
                     <div class="side-menu__sub-icon"> <i data-feather="chevron-down"></i> </div>
                 </div>
             </a>
-            <ul class="">
+            <ul class="side-menu__sub-open">
                 <li>
-                    <a href="side-menu-light-chart.html" class="side-menu">
+                    <a href="/admin/news" class="side-menu"
+                    ng-class="getClass('/admin/news')">
                         <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Chart </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-slider.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Slider </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="side-menu-light-image-zoom.html" class="side-menu">
-                        <div class="side-menu__icon"> <i data-feather="activity"></i> </div>
-                        <div class="side-menu__title"> Image Zoom </div>
+                        <div class="side-menu__title"> Tin tức </div>
                     </a>
                 </li>
             </ul>
         </li>
+        
     </ul>
 </nav>

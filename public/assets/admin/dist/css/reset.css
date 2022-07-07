@@ -101,7 +101,9 @@
     z-index: 9999;
 }
 
-#cke_1_contents > div {
+#cke_1_contents > div,
+#cke_3_contents > div,
+#cke_4_contents > div {
     padding: 8px;
 }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,6 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        return [Category::with('subCategories')
+        ->where('is_active', 1)
+        ->get()];
     }
 
     /**
@@ -34,7 +38,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category();
+        $category->category_name = $request->category_name;
+        $category->description = $request->description;
+        $category->is_active = 1;
+
+        $category->save();
+        return $this->show($category->id);
     }
 
     /**
@@ -45,7 +55,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        return Category::with('subCategories')->findOrFail($id);
     }
 
     /**
@@ -68,7 +78,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = $this->show($request->id);
+        $category->category_name = $request->category_name;
+        $category->description = $request->description;
+        $category->is_active = 1;
+
+        $category->save();
     }
 
     /**
@@ -79,6 +94,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = $this->show($id);
+        $category->is_active = -1;
+
+        $category->save();
     }
 }

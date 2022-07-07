@@ -39,7 +39,7 @@ class PriceController extends Controller
         $price = new Price();
         $price->color_id = $request->color_id;
         $price->price = $request->price;
-        $price->is_active = $request->is_active;
+        $price->is_active = 1;
         
         $price->save();
         return $this->show($price->id);
@@ -79,7 +79,7 @@ class PriceController extends Controller
         $price = $this->show($id);
         $price->color_id = $request->color_id;
         $price->price = $request->price;
-        $price->is_active = $request->is_active;
+        $price->is_active = 1;
         $price->save();
     }
 

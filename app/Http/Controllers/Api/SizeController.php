@@ -18,12 +18,6 @@ class SizeController extends Controller
         //
     }
 
-    public function getSizesByColor($id) {
-        return [Size::where('is_active', '!=', -1)
-        ->where('color_id', $id)
-        ->get()];
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -46,7 +40,7 @@ class SizeController extends Controller
         $size->color_id = $request->color_id;
         $size->size_name = $request->size_name;
         $size->quantity = $request->quantity;
-        $size->is_active = $request->is_active;
+        $size->is_active = 1;
         
         $size->save();
         return $this->show($size->id);
@@ -87,7 +81,7 @@ class SizeController extends Controller
         $size->color_id = $request->color_id;
         $size->size_name = $request->size_name;
         $size->quantity = $request->quantity;
-        $size->is_active = $request->is_active;
+        $size->is_active = 1;
         
         $size->save();
     }

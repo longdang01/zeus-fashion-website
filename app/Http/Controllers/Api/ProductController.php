@@ -18,13 +18,46 @@ class ProductController extends Controller
     public function index()
     {
         return [Product::with('subCategory')->with('supplier')->with('brand')
-        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts')
-        ->where('is_active', '!=', -1)
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
+        ->where('is_active', 1)
         ->orderBy('id', 'desc')
         ->get(), 
-        'categories' => Category::with('subCategories')->get(),
-        'brands' => Brand::get(),
-        'suppliers' => Supplier::get()];
+        'categories' => Category::with('subCategories')->where('is_active', 1)->get(),
+        'brands' => Brand::where('is_active', 1)->get(),
+        'suppliers' => Supplier::where('is_active', 1)->get()];
+    }
+
+    public function getProducts(Request $request)
+    {
+        $products = Product::with('subCategory')->with('supplier')->with('brand')
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
+        ->where('is_active', 1)
+        ->orderBy('id', 'desc');
+
+        if($request->product_name) { 
+            $products = $products->where
+            ('product_name', 'LIKE', "%$request->product_name%");
+        }
+
+        if($request->sub_category_id) { 
+            $products = $products->where
+            ('sub_category_id', '=', $request->sub_category_id);
+        }
+
+        if($request->category_id) {
+            $products = $products->whereHas
+            ('subCategory', function($query) use($request) {
+                return $query->where('category_id', $request->category_id);
+            });
+        }
+
+        return [$products->get(), 
+        'categories' => Category::with('subCategories')->where('is_active', 1)->get(),
+        'brands' => Brand::where('is_active', 1)->get(),
+        'suppliers' => Supplier::where('is_active', 1)->get()
+        ];
     }
 
     /**
@@ -56,7 +89,7 @@ class ProductController extends Controller
         $product->style = $request->style;
         $product->size_table = $request->size_table;
         $product->description = $request->description;
-        $product->is_active = $request->is_active;
+        $product->is_active = 1;
         
         $product->save();
         return $this->show($product->id);
@@ -71,7 +104,8 @@ class ProductController extends Controller
     public function show($id)
     {
         return Product::with('subCategory')->with('supplier')->with('brand')
-        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts')
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
         ->findOrFail($id);
     }
 
@@ -107,7 +141,7 @@ class ProductController extends Controller
         $product->style = $request->style;
         $product->size_table = $request->size_table;
         $product->description = $request->description;
-        $product->is_active = $request->is_active;
+        $product->is_active = 1;
         
         $product->save();
     }

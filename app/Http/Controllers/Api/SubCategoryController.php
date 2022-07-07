@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
@@ -14,7 +15,7 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        //
+        return [SubCategory::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +36,14 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $subCategory = new SubCategory();
+        $subCategory->category_id = $request->category_id;
+        $subCategory->sub_category_name = $request->sub_category_name;
+        $subCategory->description = $request->description;
+        $subCategory->is_active = 1;
+
+        $subCategory->save();
+        return $this->show($subCategory->id);
     }
 
     /**
@@ -46,7 +54,7 @@ class SubCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        return SubCategory::findOrFail($id);
     }
 
     /**
@@ -69,7 +77,13 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $subCategory = $this->show($request->id);
+        $subCategory->category_id = $request->category_id;
+        $subCategory->sub_category_name = $request->sub_category_name;
+        $subCategory->description = $request->description;
+        $subCategory->is_active = 1;
+
+        $subCategory->save();
     }
 
     /**
@@ -80,6 +94,9 @@ class SubCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $subCategory = $this->show($id);
+        $subCategory->is_active = -1;
+
+        $subCategory->save();
     }
 }

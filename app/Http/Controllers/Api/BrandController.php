@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -14,7 +15,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        return [Brand::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +36,14 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $brand = new Brand();
+        $brand->brand_name = $request->brand_name;
+        $brand->description = $request->description;
+        $brand->is_active = 1;
+
+        $brand->save();
+
+        return $this->show($brand->id);
     }
 
     /**
@@ -46,7 +54,7 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        //
+        return Brand::findOrFail($id);
     }
 
     /**
@@ -69,7 +77,12 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $brand = $this->show($request->id);
+        $brand->brand_name = $request->brand_name;
+        $brand->description = $request->description;
+        $brand->is_active = 1;
+
+        $brand->save();
     }
 
     /**
@@ -80,6 +93,9 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $brand = $this->show($id);
+        $brand->is_active = -1;
+
+        $brand->save();
     }
 }

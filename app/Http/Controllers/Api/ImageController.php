@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
@@ -35,7 +36,13 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $image = new Image();
+        $image->color_id = $request->color_id;
+        $image->picture = $request->picture;
+        $image->is_active = 1;
+        
+        $image->save();
+        return $this->show($image->id);
     }
 
     /**
@@ -46,7 +53,7 @@ class ImageController extends Controller
      */
     public function show($id)
     {
-        //
+        return Image::findOrFail($id);
     }
 
     /**
@@ -69,7 +76,12 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $image = $this->show($request->id);
+        $image->color_id = $request->color_id;
+        $image->picture = $request->picture;
+        $image->is_active = 1;
+        
+        $image->save();
     }
 
     /**
@@ -80,6 +92,8 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $image = $this->show($id);
+        $image->is_active = -1;
+        $image->save();
     }
 }

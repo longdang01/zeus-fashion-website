@@ -11,4 +11,13 @@ class Users extends Model
 
     protected $table = 'users';
 
+    public function staff() {
+        return $this->hasOne(Staff::class, 'users_id', 'id')
+        ->where('is_active', 1);
+    }
+
+    public function customer() {
+        return $this->hasOne(Customer::class, 'users_id', 'id')
+        ->where('is_active', 1);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transport;
 use Illuminate\Http\Request;
 
 class TransportController extends Controller
@@ -14,7 +15,7 @@ class TransportController extends Controller
      */
     public function index()
     {
-        //
+        return [Transport::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +36,14 @@ class TransportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $transport = new Transport();
+        $transport->transport_type = $request->transport_type;
+        $transport->fee = $request->fee;
+        $transport->description = $request->description;
+        $transport->is_active = 1;
+
+        $transport->save();
+        return $this->show($transport->id);
     }
 
     /**
@@ -46,7 +54,7 @@ class TransportController extends Controller
      */
     public function show($id)
     {
-        //
+        return Transport::findOrFail($id);
     }
 
     /**
@@ -69,7 +77,13 @@ class TransportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $transport = $this->show($request->id);
+        $transport->transport_type = $request->transport_type;
+        $transport->fee = $request->fee;
+        $transport->description = $request->description;
+        $transport->is_active = 1;
+
+        $transport->save();
     }
 
     /**
@@ -80,6 +94,9 @@ class TransportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transport = $this->show($id);
+        $transport->is_active = -1;
+
+        $transport->save();
     }
 }

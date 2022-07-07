@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -14,7 +15,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        return [Supplier::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +36,16 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $supplier = new Supplier();
+        $supplier->supplier_name = $request->supplier_name;
+        $supplier->address = $request->address;
+        $supplier->phone = $request->phone;
+        $supplier->email = $request->email;
+        $supplier->description = $request->description;
+        $supplier->is_active = 1;
+
+        $supplier->save();
+        return $this->show($supplier->id);
     }
 
     /**
@@ -46,7 +56,7 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        //
+        return Supplier::findOrFail($id);
     }
 
     /**
@@ -69,7 +79,15 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $supplier = $this->show($request->id);
+        $supplier->supplier_name = $request->supplier_name;
+        $supplier->address = $request->address;
+        $supplier->phone = $request->phone;
+        $supplier->email = $request->email;
+        $supplier->description = $request->description;
+        $supplier->is_active = 1;
+
+        $supplier->save();
     }
 
     /**
@@ -80,6 +98,9 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $supplier = $this->show($id);
+        $supplier->is_active = -1;
+
+        $supplier->save();
     }
 }

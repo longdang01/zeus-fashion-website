@@ -1,13 +1,16 @@
 app.controller('ProductController', function($rootScope, $scope, $http, $timeout) {
-    // $('#color-modal').modal('show');
     const SIZE_TABLE_UPLOAD = $('#size-table-upload');
     const SIZE_TABLE_IMAGE = $('#size-table-image');
+    const COLOR_UPLOAD = $('#color-upload');
+    const COLOR_IMAGE = $('#color-image');
+    const SUCCESS_MODAL = $('#success-modal')
+
+    /** search */
+    $scope.keySearch = "";
 
     /** pagination */ 
     $scope.currentPage = 1;
     $scope.pageSize = 10;
-    $scope.confirmDelete = false;
-
 
     /** ckeditor */ 
     $scope.options = {  
@@ -43,7 +46,6 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
     /** api/products/get-by-id/{id} */
     $scope.getProduct = (id, index) => {
 
-        $scope.actionColor(0);
 
         $scope.color = {};
         $scope.title = (id == 0) ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm';
@@ -55,6 +57,7 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             $scope.resetSTB();
         } 
         else {
+            // $scope.actionColor(0);
             const apiGetProduct = `http://localhost:8000/api/products/${id}`;
             $http(
                 {
@@ -62,14 +65,17 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
                     url: apiGetProduct
                 }
             ).then((res) => {
+                $scope.actionColor(0);
+
                 $scope.product = res.data;
-                $scope.getColorsByProduct($scope.product.id);
 
                 if(!$scope.product.size_table) $scope.resetSTB();
                 if($scope.product.size_table) { 
+                    SIZE_TABLE_IMAGE.css('display', 'block');
                     SIZE_TABLE_IMAGE.attr('src', `/uploads/products/${$scope.product.id}/${$scope.product.size_table}`);
-                    SIZE_TABLE_UPLOAD.val(null);
+                    SIZE_TABLE_UPLOAD.val('');
                 } 
+                console.log($scope.product);
 
                 if(index) { 
                     $scope.isDeleted = $scope.product;
@@ -99,11 +105,14 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
     }
 
     $scope.resetSTB = () => {
-        SIZE_TABLE_UPLOAD.val(null); 
-        SIZE_TABLE_IMAGE.attr('src', null); 
+        SIZE_TABLE_UPLOAD.val(''); 
+        SIZE_TABLE_IMAGE.attr('src', ''); 
+        SIZE_TABLE_IMAGE.css('display', 'none');
+        $scope.product.size_table = null;
     }
 
     SIZE_TABLE_UPLOAD.change(function () {
+        SIZE_TABLE_IMAGE.css('display', 'block');
         $scope.setUpload(this.files[0], '#size-table-image', 'products');
     });
 
@@ -126,9 +135,9 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
 
     /** save product */
     $scope.saveProduct = () => {
-
-        $scope.product.size_table = (SIZE_TABLE_UPLOAD[0].files[0]) ? SIZE_TABLE_UPLOAD[0].files[0]['name'] : null;
-
+        
+        $scope.product.size_table = (SIZE_TABLE_UPLOAD[0].files[0]) ? SIZE_TABLE_UPLOAD[0].files[0]['name'] : $scope.product.size_table;
+        console.log($scope.product.size_table);
         /** api/products/create */
         if($scope.action == 0) {
             const apiCreateProduct = `http://localhost:8000/api/products`;
@@ -151,6 +160,7 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         /** api/products/update */
         if($scope.action == 1) {
             const apiUpdateProduct = `http://localhost:8000/api/products/${$scope.product.id}`;
+            console.log($scope.product);
 
             $http({
                 method: 'PUT',
@@ -191,21 +201,6 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         });
     }
 
-    /** api/get-colors-by-product/{id} */
-    $scope.getColorsByProduct = (id) => {
-
-        const apiGetColorsByProduct = `http://localhost:8000/api/get-colors-by-product/${id}`;
-        $http(
-            {
-                method: 'GET',
-                url: apiGetColorsByProduct
-            }
-        ).then((res) => {
-            $scope.colors = res.data[0];
-
-        }, (err) => console.log(err))
-    }
-
     /** api/colors/get-by-id/{id} */
     $scope.getColor = (id, event, index) => {
         $(event.target).parents('tr').addClass('active').siblings().removeClass('active');
@@ -218,11 +213,13 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
                 url: apiGetColor
             }
         ).then((res) => {
-            
             $scope.color = res.data;
-            $scope.getSizesByColor($scope.color.id);
             
             if(index == 1) {
+                $scope.actionPrice(-1);
+                $scope.actionSize(0);
+                $scope.actionDiscount(0);
+                $scope.actionImage(0);
                 $('#color-modal').modal('show');
             }
 
@@ -244,7 +241,7 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             data: $scope.color,
             "content-Type": "application/json"
         }).then((res) => {
-            $scope.colors.push(res.data);
+            $scope.product.colors.push(res.data);
             $scope.actionColor(0);
 
 
@@ -262,8 +259,8 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             "content-Type": "application/json"
         }).then((res) => {
 
-            const index = $scope.colors.findIndex(item => item.id == $scope.color.id);
-            $scope.colors[index] = $scope.color;
+            const index = $scope.product.colors.findIndex(item => item.id == $scope.color.id);
+            $scope.product.colors[index] = $scope.color;
             
             $scope.actionColor(0);
         }, (err) => console.log(err));
@@ -277,8 +274,8 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             url: apiDeleteColor
         }).then((res) => {
 
-            const index = $scope.colors.findIndex(item => item.id == $scope.color.id);
-            $scope.colors.splice(index, 1);
+            const index = $scope.product.colors.findIndex(item => item.id == $scope.color.id);
+            $scope.product.colors.splice(index, 1);
 
             $scope.actionColor(0);
         });
@@ -310,22 +307,30 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         if($scope.color.price.id) {
             const apiUpdatePrice = `http://localhost:8000/api/prices/${$scope.color.price.id}`;
     
+            console.log($scope.color.price);
+            if($scope.color.price.price == '') {
+                $scope.deletePrice($scope.color.price.id);
+            }
             $http({
                 method: 'PUT',
                 url: apiUpdatePrice,
                 data: $scope.color.price,
                 "content-Type": "application/json"
             }).then((res) => {
-                const index = $scope.colors.findIndex(item => item.id == $scope.color.id);
-                $scope.colors[index] = $scope.color;
-                $('#success-modal-preview').modal('show');
+
+                const index = $scope.product.colors.findIndex(item => item.id == $scope.color.id);
+                $scope.product.colors[index] = $scope.color;
+                $scope.actionPrice(-1);
+                SUCCESS_MODAL.modal('show');
+                SUCCESS_MODAL.on('hidden.bs.modal', function () {
+                    removeScrollOfBody();
+                })
             }, (err) => console.log(err));
         }
         /** api/prices/create */
         else {
             const apiCreatePrice = `http://localhost:8000/api/prices/`;
             $scope.color.price.color_id = $scope.color.id;
-            $scope.color.price.is_active = 1;
     
             $http({
                 method: 'POST',
@@ -333,10 +338,14 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
                 data: $scope.color.price,
                 "content-Type": "application/json"
             }).then((res) => {
-                $scope.color.price = res.data;
-                const index = $scope.colors.findIndex(item => item.id == $scope.color.id);
-                $scope.colors[index] = $scope.color;
-                $('#success-modal-preview').modal('show');
+                const index = $scope.product.colors.findIndex(item => item.id == $scope.color.id);
+                $scope.product.colors[index] = $scope.color;
+
+                $scope.actionPrice(-1);
+                SUCCESS_MODAL.modal('show');
+                SUCCESS_MODAL.on('hidden.bs.modal', function () {
+                    removeScrollOfBody();
+                })
             }, (err) => console.log(err));
         }
     }
@@ -354,25 +363,25 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             }).then((res) => {
     
                 $scope.color.price.price = null;
-                const index = $scope.colors.findIndex(item => item.id == $scope.color.id);
-                $scope.colors[index] = $scope.color;
+                const index = $scope.product.colors.findIndex(item => item.id == $scope.color.id);
+                $scope.product.colors[index] = $scope.color;
+                $scope.actionPrice(-1);
+                removeScrollOfBody();
             });
         }
     }
 
-    /** api/get-sizes-by-color/{id} */
-    $scope.getSizesByColor = (id) => {
+    /** client button color */
+    $scope.actionPrice = (action) => {
+        const btnDeletePrice = $('.btn__delete-price');
 
-        const apiGetSizesByColor = `http://localhost:8000/api/get-sizes-by-color/${id}`;
-        $http(
-            {
-                method: 'GET',
-                url: apiGetSizesByColor
+        if(action == -1) {
+            if($scope.color.price == null || $scope.color.price.price == null) {
+                btnDeletePrice.attr('disabled', true);
+            }else {
+                btnDeletePrice.attr('disabled', false);
             }
-        ).then((res) => {
-            $scope.sizes = res.data[0];
-
-        }, (err) => console.log(err))
+        }
     }
 
     /** api/sizes/get-by-id/{id} */
@@ -392,6 +401,10 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             if(index == -1) { 
                 $scope.isDeleted = $scope.size;
                 $('#delete-modal').modal('show');
+
+                $('#delete-modal').on('hidden.bs.modal', function () {
+                    removeScrollOfBody();
+                })
             }
         }, (err) => console.log(err))
     }
@@ -407,9 +420,10 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             data: $scope.size,
             "content-Type": "application/json"
         }).then((res) => {
-            $scope.sizes.push(res.data);
+            $scope.color.sizes.push(res.data);
             $scope.actionSize(0);
 
+            $scope.getProducts();
 
         }, (err) => console.log(err));
     }
@@ -425,8 +439,10 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             "content-Type": "application/json"
         }).then((res) => {
 
-            const index = $scope.sizes.findIndex(item => item.id == $scope.size.id);
-            $scope.sizes[index] = $scope.size;
+            const index = $scope.color.sizes.findIndex(item => item.id == $scope.size.id);
+            $scope.color.sizes[index] = $scope.size;
+
+            $scope.getProducts();
             
             $scope.actionSize(0);
         }, (err) => console.log(err));
@@ -440,29 +456,240 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
             url: apiDeleteSize
         }).then((res) => {
 
-            const index = $scope.sizes.findIndex(item => item.id == $scope.size.id);
-            $scope.sizes.splice(index, 1);
+            const index = $scope.color.sizes.findIndex(item => item.id == $scope.size.id);
+            $scope.color.sizes.splice(index, 1);
+
+            $scope.getProducts();
 
             $scope.actionSize(0);
+            removeScrollOfBody();
         });
     }
 
-    /** client button color */
+    /** client button size */
     $scope.actionSize = (action) => {
         const btnCreateSize = $('.btn__create-size');
         const btnUpdateSize = $('.btn__update-size');
-        const tableSizes = $('.table__sizes');
 
         if(action == 0) {
             btnUpdateSize.attr('disabled', true);
             btnCreateSize.attr('disabled', false);
-            tableSizes.find('tr').removeClass('active');
+            btnCreateSize.parents('.grid').siblings('.table__colors').find('tr').removeClass('active');
             $scope.size = {};
         }
 
         if(action == 1) {
             btnCreateSize.attr('disabled', true);
             btnUpdateSize.attr('disabled', false);
+        }
+    }
+
+    /** api/discounts/get-by-id/{id} */
+    $scope.getDiscount = (id, event, index) => {
+        $(event.target).parents('tr').addClass('active').siblings().removeClass('active');
+        $scope.actionDiscount(1);
+
+        const apiGetDiscount = `http://localhost:8000/api/discounts/${id}`;
+        $http(
+            {
+                method: 'GET',
+                url: apiGetDiscount
+            }
+        ).then((res) => {
+            $scope.discount = res.data;
+
+            if(index == -1) { 
+                $scope.isDeleted = $scope.discount;
+                $('#delete-modal').modal('show');
+                $('#delete-modal').on('hidden.bs.modal', function () {
+                    removeScrollOfBody();
+                })
+            }
+        }, (err) => console.log(err))
+    }
+
+    /** api/discounts/create */
+    $scope.addDiscount = () => {
+        $scope.discount.color_id = $scope.color.id;
+
+        const apiCreateDiscount = `http://localhost:8000/api/discounts`;
+        $http({
+            method: 'POST',
+            url: apiCreateDiscount,
+            data: $scope.discount,
+            "content-Type": "application/json"
+        }).then((res) => {
+            $scope.color.discounts.push(res.data);
+            $scope.actionDiscount(0);
+
+        }, (err) => console.log(err));
+    }
+
+    /** api/discounts/update */
+    $scope.updateDiscount = () => {
+        const apiUpdateDiscount = `http://localhost:8000/api/discounts/${$scope.discount.id}`;
+
+        $http({
+            method: 'PUT',
+            url: apiUpdateDiscount,
+            data: $scope.discount,
+            "content-Type": "application/json"
+        }).then((res) => {
+
+            const index = $scope.color.discounts.findIndex(item => item.id == $scope.discount.id);
+            $scope.color.discounts[index] = $scope.discount;
+
+            $scope.actionDiscount(0);
+        }, (err) => console.log(err));
+    }
+
+    /** api/discounts/delete/{id} */
+    $scope.deleteDiscount = (id) => {
+        const apiDeleteDiscount = `http://localhost:8000/api/discounts/${id}`;
+        $http({
+            method: "DELETE",
+            url: apiDeleteDiscount
+        }).then((res) => {
+            const index = $scope.color.discounts.findIndex(item => item.id == $scope.discount.id);
+            $scope.color.discounts.splice(index, 1);
+            
+            $scope.actionDiscount(0);
+            removeScrollOfBody();
+        });
+    }
+
+    /** client button discount */
+    $scope.actionDiscount = (action) => {
+        const btnCreateDiscount = $('.btn__create-discount');
+        const btnUpdateDiscount = $('.btn__update-discount');        
+
+        if(action == 0) {
+            btnUpdateDiscount.attr('disabled', true);
+            btnCreateDiscount.attr('disabled', false);            
+            btnCreateDiscount.parents('.grid').siblings('.table__colors').find('tr').removeClass('active');
+
+            $scope.discount = {};
+        }
+
+        if(action == 1) {
+            btnCreateDiscount.attr('disabled', true);
+            btnUpdateDiscount.attr('disabled', false);
+        }
+    }
+
+    /** handle color image upload */
+    COLOR_UPLOAD.change(function () {
+        COLOR_IMAGE.css('display', 'block');
+        $scope.setUpload(this.files[0], '#color-image', 'products');
+    });
+
+    /** api/images/get-by-id/{id} */
+    $scope.getImage = (id, event, index) => {
+        $(event.target).parents('tr').addClass('active').siblings().removeClass('active');
+        $scope.actionImage(1);
+
+        const apiGetImage = `http://localhost:8000/api/images/${id}`;
+        $http(
+            {
+                method: 'GET',
+                url: apiGetImage
+            }
+        ).then((res) => {
+            $scope.image = res.data;
+            COLOR_IMAGE.css('display', 'block');
+            COLOR_IMAGE.attr('src', `/uploads/products/${$scope.product.id}/${$scope.image.picture}`)
+
+            if(index == -1) { 
+                $scope.isDeleted = $scope.image;
+                $('#delete-modal').modal('show');
+                $('#delete-modal').on('hidden.bs.modal', function () {
+                    removeScrollOfBody();
+                })
+            }
+        }, (err) => console.log(err))
+    }
+
+    /** api/images/create */
+    $scope.addImage = () => {
+        $scope.image.color_id = $scope.color.id;
+        $scope.image.picture = (COLOR_UPLOAD[0].files[0]) ? COLOR_UPLOAD[0].files[0]['name'] : $scope.image.picture;
+
+        const apiCreateImage = `http://localhost:8000/api/images`;
+        $http({
+            method: 'POST',
+            url: apiCreateImage,
+            data: $scope.image,
+            "content-Type": "application/json"
+        }).then((res) => {
+            $scope.color.images.push(res.data);
+
+            $scope.afterSaveImage($scope.product.id);
+            $scope.actionImage(0);
+        }, (err) => console.log(err));
+    }
+
+    /** api/images/update */
+    $scope.updateImage = () => {
+        const apiUpdateImage = `http://localhost:8000/api/images/${$scope.image.id}`;
+        $scope.image.picture = (COLOR_UPLOAD[0].files[0]) ? COLOR_UPLOAD[0].files[0]['name'] : $scope.image.picture;
+        
+        $http({
+            method: 'PUT',
+            url: apiUpdateImage,
+            data: $scope.image,
+            "content-Type": "application/json"
+        }).then((res) => {
+
+            const index = $scope.color.images.findIndex(item => item.id == $scope.image.id);
+            $scope.color.images[index] = $scope.image;
+
+            $scope.afterSaveImage($scope.product.id);
+            $scope.actionImage(0);
+        }, (err) => console.log(err));
+    }
+
+    $scope.afterSaveImage = (id) => {
+        if($scope.postProduct) {
+
+            $scope.postProduct.append('id', id);
+            $scope.upload($scope.postProduct);
+        }
+    }
+
+    /** api/images/delete/{id} */
+    $scope.deleteImage = (id) => {
+        const apiDeleteImage = `http://localhost:8000/api/images/${id}`;
+        $http({
+            method: "DELETE",
+            url: apiDeleteImage
+        }).then((res) => {
+            const index = $scope.color.images.findIndex(item => item.id == $scope.image.id);
+            $scope.color.images.splice(index, 1);
+            
+            $scope.actionImage(0);
+            removeScrollOfBody();
+        });
+    }
+
+    /** client button image */
+    $scope.actionImage = (action) => {
+        const btnCreateImage = $('.btn__create-image');
+        const btnUpdateImage = $('.btn__update-image');
+
+        if(action == 0) {
+            btnUpdateImage.attr('disabled', true);
+            btnCreateImage.attr('disabled', false);
+            btnCreateImage.parents('.grid').siblings('.table__colors').find('tr').removeClass('active');
+            COLOR_IMAGE.attr('src', '')
+            COLOR_UPLOAD.val('')
+            COLOR_IMAGE.css('display', 'none');
+
+            $scope.image = {};
+        }
+
+        if(action == 1) {
+            btnCreateImage.attr('disabled', true);
+            btnUpdateImage.attr('disabled', false);
         }
     }
 
@@ -473,14 +700,18 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         const color = JSON.stringify($scope.color);
         const price = JSON.stringify($scope.color.price);
         const size = JSON.stringify($scope.size);
+        const discount = JSON.stringify($scope.discount);
+        const image = JSON.stringify($scope.image);
 
         switch(isDeleted) {
             case product: $scope.deleteProduct($scope.product.id); break;
             case color: $scope.deleteColor($scope.color.id); break;
             case price: $scope.deletePrice($scope.color.price.id); break;
             case size: $scope.deleteSize($scope.size.id); break;
+            case discount: $scope.deleteDiscount($scope.discount.id); break;
+            case image: $scope.deleteImage($scope.image.id); break;
         }
-        $('#delete-modal').modal('hide');
+        // $('#delete-modal').modal('hide');
     }
 
     /** get remaining stock */

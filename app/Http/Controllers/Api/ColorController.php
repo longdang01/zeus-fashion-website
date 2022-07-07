@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ColorController extends Controller
 {
@@ -16,14 +17,7 @@ class ColorController extends Controller
     public function index()
     {
         return [Color::with('price')->with('sizes')->with('images')->with('discounts')
-        ->where('is_active', '!=', -1)
-        ->get()];
-    }
-
-    public function getColorsByProduct($id) {
-        return [Color::with('price')->with('sizes')->with('images')->with('discounts')
-        ->where('is_active', '!=', -1)
-        ->where('product_id', $id)
+        ->where('is_active', 1)
         ->get()];
     }
 
@@ -49,7 +43,7 @@ class ColorController extends Controller
         $color->product_id = $request->product_id;
         $color->color_name = $request->color_name;
         $color->hex = $request->hex;
-        $color->is_active = $request->is_active;
+        $color->is_active = 1;
 
         $color->save();
         return $this->show($color->id);
@@ -91,7 +85,7 @@ class ColorController extends Controller
         $color->product_id = $request->product_id;
         $color->color_name = $request->color_name;
         $color->hex = $request->hex;
-        $color->is_active = $request->is_active;
+        $color->is_active = 1;
 
         $color->save();
     }

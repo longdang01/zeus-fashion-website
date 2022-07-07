@@ -11,4 +11,14 @@ class Staff extends Model
 
     protected $table = 'staff';
 
+    public function users() {
+        return $this->belongsTo(Users::class, 'users_id', 'id')
+        ->where('is_active', 1);
+    } 
+    
+    public function position() {
+        return $this->belongsTo(Position::class, 'position_id', 'id')
+        ->where('is_active', 1);
+    } 
+
 }

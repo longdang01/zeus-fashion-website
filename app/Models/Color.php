@@ -23,12 +23,23 @@ class Color extends Model
 
     public function discounts() {
         return $this->hasMany(Discount::class, 'color_id', 'id')
-        ->where('is_active', 1);
+        ->where('is_active', '!=', -1);
     }
 
     public function price() {
         return $this->hasOne(Price::class, 'color_id', 'id')
         ->where('is_active', 1);
     }
+
+    public function sale() {
+        return $this->hasOne(Discount::class, 'color_id', 'id')
+        ->where('is_active', 1);
+    }
+
+    public function codes() {
+        return $this->hasMany(Discount::class, 'color_id', 'id')
+        ->where('is_active', 0);
+    }
+    
 
 }

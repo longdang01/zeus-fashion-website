@@ -1,3 +1,10 @@
+<script>
+    if(sessionStorage.getItem('staffID') === null){
+        window.location.replace('/admin/login');
+    }
+
+</script>
+
 <!DOCTYPE html>
 <!--
 Template Name: Rubick - HTML Admin Dashboard Template
@@ -24,9 +31,11 @@ License: You must have a valid license purchased only from themeforest(the above
     <link rel="stylesheet" href="/assets/admin/dist/css/reset.css" />
     <link rel="stylesheet" href="/assets/admin/dist/css/style.css" />
     <!-- END: CSS Assets-->
+
+    
 </head>
 <!-- END: Head -->
-<body class="main" ng-app="App">
+<body class="main" ng-app="App" ng-controller="AppController">
     <!-- BEGIN: Mobile Menu -->
     @include('admin.components._mobile')
     <!-- END: Mobile Menu -->
@@ -55,7 +64,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN: Toast -->
     @include('admin.components._toast')
     <!-- END: Dark Mode Switcher-->
-    
+
     <!-- BEGIN: JS Assets-->
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBG7gNHAhDzgYmq4-EHvM4bqW1DNj2UCuk&libraries=places"></script>
@@ -66,9 +75,22 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="/assets/admin/dist/js/jquery-3.6.0.min.js"></script>
     <script src="/assets/admin/dist/js/dirPagination.js"></script>
     <script src="/assets/admin/dist/js/angular-ckeditor.js"></script>
+    <script src="/assets/admin/dist/js/angular-datetime.js"></script>
     <script src="/assets/admin/dist/js/main.js"></script>
     <script src="/assets/admin/dist/controllers/AppController.js"></script>
+    <script src="/assets/admin/dist/controllers/LoginController.js"></script>
     <script src="/assets/admin/dist/controllers/ProductController.js"></script>
+    <script src="/assets/admin/dist/controllers/CategoryController.js"></script>
+    <script src="/assets/admin/dist/controllers/BrandController.js"></script>
+    <script src="/assets/admin/dist/controllers/SupplierController.js"></script>
+    <script src="/assets/admin/dist/controllers/PaymentController.js"></script>
+    <script src="/assets/admin/dist/controllers/TransportController.js"></script>
+    <script src="/assets/admin/dist/controllers/RoleController.js"></script>
+    <script src="/assets/admin/dist/controllers/OrdersController.js"></script>
+    <script src="/assets/admin/dist/controllers/StaffController.js"></script>
+    <script src="/assets/admin/dist/controllers/NewsController.js"></script>
+
+    
     <!-- END: JS Assets-->
 </body>
 </html>

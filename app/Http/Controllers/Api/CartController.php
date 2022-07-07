@@ -17,6 +17,16 @@ class CartController extends Controller
         //
     }
 
+    public function getCartForCustomer($customer_id) {
+        // return Cart::with('cartDetails', 'cartDetails.product',
+        // 'cartDetails.color', 'cartDetails.size')
+        // ->where('customer_id', $customer_id)->first();
+    }
+
+    public function checkExistsCart() {
+
+    } 
+
     /**
      * Show the form for creating a new resource.
      *

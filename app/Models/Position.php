@@ -11,4 +11,9 @@ class Position extends Model
 
     protected $table = 'position';
 
+    public function role() {
+        return $this->belongsTo(Role::class, 'role_id', 'id')
+        ->where('is_active', 1);
+    }
+
 }

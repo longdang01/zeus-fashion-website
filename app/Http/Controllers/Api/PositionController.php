@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
@@ -14,7 +15,7 @@ class PositionController extends Controller
      */
     public function index()
     {
-        //
+        return [Position::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +36,14 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $position = new Position();
+        $position->role_id = $request->role_id;
+        $position->position_name = $request->position_name;
+        $position->description = $request->description;
+        $position->is_active = 1;
+
+        $position->save();
+        return $this->show($position->id);
     }
 
     /**
@@ -46,7 +54,7 @@ class PositionController extends Controller
      */
     public function show($id)
     {
-        //
+        return Position::findOrFail($id);
     }
 
     /**
@@ -69,7 +77,13 @@ class PositionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $position = $this->show($request->id);
+        $position->role_id = $request->role_id;
+        $position->position_name = $request->position_name;
+        $position->description = $request->description;
+        $position->is_active = 1;
+
+        $position->save();
     }
 
     /**
@@ -80,6 +94,9 @@ class PositionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $position = $this->show($id);
+        $position->is_active = -1;
+
+        $position->save();
     }
 }

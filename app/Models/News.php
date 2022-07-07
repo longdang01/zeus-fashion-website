@@ -11,4 +11,8 @@ class News extends Model
 
     protected $table = 'news';
 
+    public function staff() {
+        return $this->belongsTo(Staff::class, 'staff_id', 'id')
+        ->where('is_active', 1);
+    }
 }

@@ -10,5 +10,6 @@ class CartDetail extends Model
     use HasFactory;
 
     protected $table = 'cart_detail';
+    
 
 }

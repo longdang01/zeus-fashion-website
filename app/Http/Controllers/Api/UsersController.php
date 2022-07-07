@@ -3,10 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+    //return users if exist username, password
+    public function checkLogin(Request $request)
+    {
+        return Users::with('staff', 'staff.users', 'staff.position')
+        ->with('customer', 'customer.users', 'customer.deliveryAddress')
+        ->where([
+            ['username', $request->username],
+            ['password', $request->password],
+            ['is_active', 1]
+        ])->first();
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +27,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        return [Users::where('is_active', 1)->get()];
     }
 
     /**
@@ -35,7 +48,13 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $users = new Users();
+        $users->username = $request->username;
+        $users->password = $request->password;
+        $users->is_active = 1;
+
+        $users->save();
+        return $this->show($users->id);
     }
 
     /**
@@ -46,7 +65,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        return [Users::findOrFail($id)];
     }
 
     /**
@@ -69,7 +88,12 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $users = $this->show($request->id);
+        $users->username = $request->username;
+        $users->password = $request->password;
+        $users->is_active = 1;
+
+        $users->save();
     }
 
     /**
@@ -80,6 +104,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $users = $this->show($id);
+        $users->is_active = -1;
+
+        $users->save();
     }
 }

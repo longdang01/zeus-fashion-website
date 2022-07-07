@@ -38,3 +38,11 @@
     transform: scale(0);
     transition: transform .3s ease;
 }
+
+.side-nav > ul > li.active {
+    display: block;
+}
+
+.side-nav > ul > li.hide {
+    display: none;
+}

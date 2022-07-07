@@ -11,4 +11,6 @@ class Discount extends Model
 
     protected $table = 'discount';
 
+    
+
 }

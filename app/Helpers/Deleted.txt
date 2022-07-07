@@ -2,3 +2,33 @@
     // sizeTable.on('change', function(e) {
     //     readUrl(this, '.size__table-picture');
     // })
+
+<!-- <div class="header__options d-none d-lg-block">
+                    <ul class="d-flex align-items-center">
+                        <li class="header__options--item">
+                            <img class="header__info--text__icon" src="/assets/client/dist/images/icon/bus.png" alt="bus-icon">
+                            <a href="#" class="">Đơn hàng của bạn</a>
+                        </li>
+                        <li class="header__options--item">
+                        <i class="fa-regular fa-alarm-clock text-white"></i>
+                            <i class="fa-solid fa-power-off text-white"></i>
+                            <a href="#" class="">Đăng nhập</a>
+                        </li>
+                        <li class="header__options--item">
+                            <i class="fa-solid fa-id-card-clip text-white"></i>
+                            <a href="#" class="">Đăng ký</a>
+                        </li>
+                    </ul>
+                </div> -->
+                <!-- <div class="header__options d-none d-lg-block">
+                    <ul class="d-flex align-items-center">
+                        <li class="header__options--item text-white">Chào mừng bạn đến với Zeus Studio</li>
+                        <li class="header__options--item text-white d-sm-2-none">
+                            <i class="fa-solid fa-headphones-simple"></i>
+                            098 382 38 38
+                        </li>
+                        <li class="header__options--item text-white d-sm-2-none">
+                            <img class="header__info--text__icon" src="/assets/client/dist/images/icon/email.png" alt="email-icon">
+                            zeus-studio@gmail.com
+                        </li>
+                    </ul> -->

@@ -11,4 +11,13 @@ class Customer extends Model
 
     protected $table = 'customer';
 
+    public function users() {
+        return $this->belongsTo(Users::class, 'users_id', 'id')
+        ->where('is_active', 1);
+    } 
+
+    public function deliveryAddress() {
+        return $this->hasMany(DeliveryAddress::class, 'customer_id', 'id');
+    }
+
 }

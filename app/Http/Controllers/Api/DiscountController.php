@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -35,7 +36,15 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $discount = new Discount();
+        $discount->color_id = $request->color_id;
+        $discount->discount_name = $request->discount_name;
+        $discount->value = $request->value;
+        $discount->symbol = $request->symbol;
+        $discount->is_active = $request->is_active;
+        
+        $discount->save();
+        return $this->show($discount->id);
     }
 
     /**
@@ -46,7 +55,7 @@ class DiscountController extends Controller
      */
     public function show($id)
     {
-        //
+        return Discount::findOrFail($id);
     }
 
     /**
@@ -69,7 +78,14 @@ class DiscountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $discount = $this->show($request->id);
+        $discount->color_id = $request->color_id;
+        $discount->discount_name = $request->discount_name;
+        $discount->value = $request->value;
+        $discount->symbol = $request->symbol;
+        $discount->is_active = $request->is_active;
+        
+        $discount->save();
     }
 
     /**
@@ -80,6 +96,8 @@ class DiscountController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $discount = $this->show($id);
+        $discount->is_active = -1;
+        $discount->save();
     }
 }

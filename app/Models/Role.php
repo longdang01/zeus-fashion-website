@@ -11,4 +11,7 @@ class Role extends Model
 
     protected $table = 'role';
 
+    public function positions() {
+        return $this->hasMany(Position::class, 'role_id', 'id')->where('is_active', 1);
+    }
 }
