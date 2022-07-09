@@ -1,7 +1,9 @@
 var app = angular.module('App',
 ['angularUtils.directives.dirPagination', 'ngSanitize']);
 
+
 app.controller('AppController', function($rootScope, $scope, $http, $timeout, $location) {
+  sessionStorage.removeItem('staffID');
   $rootScope.keyword = '';
 
 })
