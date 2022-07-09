@@ -32,12 +32,22 @@ Route::get('/admin/news', function () { return view('admin.news.index'); });
 //Client
 Route::get('/', function () { return view('client.home.index'); });
 Route::get('/products', function () { return view('client.products.index'); });
+Route::get('/details', function () { return view('client.details.index'); });
+Route::get('/carts', function () { return view('client.carts.index'); });
+
 Route::get('/products?category={category}&subCategory={subCategory}&keyword={keyword}', function ($category, $subCategory, $keyword)
 { 
     return [view('client.products.index'),
     'category' => $category,
     'subCategory' => $subCategory,
     'keyword' => $keyword
+    ];
+});
+
+Route::get('/details?name={name}&id={id}', function($name, $id) {
+    return [view('client.details.index'),
+    'name' => $name,
+    'id' => $id,
     ];
 });
 Route::get('/login', function () { return view('client.customers.login'); });

@@ -66,8 +66,29 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         $rootScope.getProduct();
     }
 
-    $scope.addCart = () => {
-        
+    $scope.addCart = (product) => {
+        const customerID = JSON.parse(sessionStorage.getItem('customerID'));
+
+        if(customerID) {
+
+            const apiAddCart = `http://127.0.0.1:8000/api/cartDetails`; 
+            $http({
+                method: 'POST',
+                url: apiAddCart,
+                data: 
+                { 
+                    customer_id: customerID,
+                    product_id: product.id,
+                    color_id: product.colors[0].id,
+                    size_id: product.colors[0].sizes[0].id,
+                    quantity: 1,
+                },
+                "content-Type": "application/json"
+            }).then((res) => {
+                console.log(res.data);
+                
+            }, (err) => console.log(err));
+        } else window.open('/login', '_self');
     }
     
     

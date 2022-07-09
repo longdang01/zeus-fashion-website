@@ -1,5 +1,5 @@
 var app = angular.module('App',
-['angularUtils.directives.dirPagination']);
+['angularUtils.directives.dirPagination', 'ngSanitize']);
 
 app.controller('AppController', function($rootScope, $scope, $http, $timeout, $location) {
   $rootScope.keyword = '';
@@ -29,8 +29,8 @@ const UrlFriendly = () => {
     str = str.toLowerCase();
     
     // remove accents, swap ñ for n, etc
-    var from = "àáäâầèéëêệìíïîòóöôùúüûụñç·/_,:;";
-    var to   = "aaaaaeeeeeiiiioooouuuuunc------";
+    var from = "àáäâầèéëêệếìíïîòóöôọùúüûụñç·/_,:;";
+    var to   = "aaaaaeeeeeeiiiiooooouuuuunc------";
     for (var i=0, l=from.length ; i<l ; i++) {
       str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
     }

@@ -134,12 +134,14 @@
     <script src="/assets/client/dist/js/scripts.js"></script>
     
     <script src="/assets/client/dist/js/angular.min.js"></script> 
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.js"></script>
     <script src="/assets/client/dist/js/dirPagination.js"></script> 
     <script src="/assets/client/dist/controllers/AppController.js"></script>
     <script src="/assets/client/dist/controllers/CategoryController.js"></script>
     <script src="/assets/client/dist/controllers/ProductController.js"></script>
     <script src="/assets/client/dist/controllers/DetailController.js"></script>
     <script src="/assets/client/dist/controllers/CustomerController.js"></script>
+    <script src="/assets/client/dist/controllers/CartController.js"></script>
 
 </body>
 </html>

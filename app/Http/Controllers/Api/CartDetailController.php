@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartDetailController extends Controller
 {
@@ -14,9 +17,18 @@ class CartDetailController extends Controller
      */
     public function index()
     {
-        //
+        return [CartDetail::with('product')->with('color')->with('size')
+        ->where('is_active', '!=', -1)];
     }
 
+    public function getCartDetail($request, $cart) {
+        return CartDetail::with('product')->with('color')->with('size')->
+        where('product_id', $request->product_id)->
+        where('color_id', $request->color_id)->
+        where('size_id', $request->size_id)->
+        where('cart_id', $cart->id)
+        ->first();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +47,32 @@ class CartDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cart = Cart::where('customer_id', $request->customer_id)->first();
+
+        if(!$cart) {
+            $cart = new Cart();
+            $cart->customer_id = $request->customer_id;
+            $cart->is_active = 1;
+            $cart->save();
+        } 
+
+        $cartDetail = $this->getCartDetail($request, $cart);
+        if($cartDetail) {
+            $request->quantity += $cartDetail->quantity; 
+        } else {
+            $cartDetail = new CartDetail();
+        }
+        
+        $cartDetail->cart_id = $cart->id;
+        $cartDetail->product_id = $request->product_id;
+        $cartDetail->color_id = $request->color_id;
+        $cartDetail->size_id = $request->size_id;
+        $cartDetail->quantity = $request->quantity;
+        $cartDetail->is_active = 0;
+
+        $cartDetail->save();
+
+        return $this->show($cartDetail->id);
     }
 
     /**
@@ -46,7 +83,11 @@ class CartDetailController extends Controller
      */
     public function show($id)
     {
-        //
+        return CartDetail::with('product')->with('color')->with('size')
+        ->where([
+            ['is_active', '<>', -1],
+            ['id', '=', $id]
+        ])->first();
     }
 
     /**
@@ -69,7 +110,17 @@ class CartDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cartDetail = $this->show($request->id);
+        $cartDetail->cart_id = $request->cart_id;
+        $cartDetail->product_id = $request->product_id;
+        $cartDetail->color_id = $request->color_id;
+        $cartDetail->size_id = $request->size_id;
+        $cartDetail->quantity = $request->quantity;
+        $cartDetail->is_active = $request->is_active;
+        
+        $cartDetail->save();
+
+        return $cartDetail;
     }
 
     /**
@@ -80,6 +131,9 @@ class CartDetailController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cartDetail = $this->show($id);
+        $cartDetail->is_active = -1;
+        
+        $cartDetail->save();
     }
 }

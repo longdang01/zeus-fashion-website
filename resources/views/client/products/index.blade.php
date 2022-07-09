@@ -84,7 +84,8 @@
                                     </a>
                                     <div class="product_action_box">
                                         <ul class="list_none pr_action_btn">
-                                            <li class="add-to-cart"><a href="#"><i class="icon-basket-loaded"></i></a></li>
+                                            <li class="add-to-cart"><a href="#"
+                                            ng-click="addCart(product)"><i class="icon-basket-loaded"></i></a></li>
                                             <li><a href="shop-compare.html" class="popup-ajax"><i class="icon-shuffle"></i></a></li>
                                             <li><a href="javascript:;" class="popup-ajax"
                                             ng-click="goDetail(product.id, 1)"
@@ -95,7 +96,9 @@
                                 </div>
                                 <div class="product_info">
                                     <h6 class="product_title">
-                                        <a href="shop-product-detail.html" title="@{{ product.product_name }}">
+                                        <a href="/details?name=@{{ product.product_name | UrlFriendly }}&id=@{{ product.id }}"
+                                        ng-click="goDetail(product.id, 0)"
+                                        title="@{{ product.product_name }}">
                                             @{{ product.product_name }}
                                         </a>
                                     </h6>

@@ -11,4 +11,8 @@ class Cart extends Model
 
     protected $table = 'cart';
 
+    public function cartDetails() {
+        return $this->hasMany(CartDetail::class, 'cart_id', 'id')
+        ->where('is_active', '!=', -1);
+    }
 }

@@ -65,12 +65,13 @@ Route::resource('news', NewsController::class);
 Route::post('upload', [apiUpload::class, 'upload']);
 
 //client
-Route::get('product/get-products', [ProductController::class, 'getProducts']);
 Route::resource('customers', CustomerController::class);
-
-
 Route::resource('carts', CartController::class);
 Route::resource('cartDetails', CartDetailController::class);
+
+
+Route::get('product/get-products', [ProductController::class, 'getProducts']);
+Route::get('cart/get-carts/{customerID}', [CartController::class, 'getCarts']);
 
 // &
 Route::post('login_check', [UsersController::class, 'checkLogin']);

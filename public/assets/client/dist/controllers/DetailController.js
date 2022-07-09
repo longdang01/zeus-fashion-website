@@ -6,7 +6,12 @@ app.controller('DetailController', function($rootScope, $scope, $http, $timeout)
 
     /** api/products/get-by-id/{id} */
     $rootScope.getProduct = () => {
-        const productID = JSON.parse(sessionStorage.getItem('productID'));
+        let productID = 0;
+        if($rootScope.page == 1) {
+            productID = JSON.parse(sessionStorage.getItem('productID'));
+        } else {
+            productID = $('#productID').val();
+        }
 
         let apiGetProduct = '';
         if(productID) apiGetProduct = `http://localhost:8000/api/products/${productID}`;

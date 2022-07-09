@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -14,18 +15,24 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        return [Cart::with('cartDetails', 'cartDetails.product',
+        'cartDetails.product.colors',
+        'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
+        'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
+        'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
+        'cartDetails.color', 'cartDetails.size')
+        ->where('is_active', 1)];
     }
 
-    public function getCartForCustomer($customer_id) {
-        // return Cart::with('cartDetails', 'cartDetails.product',
-        // 'cartDetails.color', 'cartDetails.size')
-        // ->where('customer_id', $customer_id)->first();
+    public function getCarts($customer_id) {
+        return Cart::with('cartDetails', 'cartDetails.product',
+        'cartDetails.product.colors',
+        'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
+        'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
+        'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
+        'cartDetails.color', 'cartDetails.size')
+        ->where('customer_id', $customer_id)->first();
     }
-
-    public function checkExistsCart() {
-
-    } 
 
     /**
      * Show the form for creating a new resource.
@@ -45,7 +52,12 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cart = new Cart();
+        $cart->customer_id = $request->customer_id;
+        $cart->is_active = 1;
+        $cart->save();
+
+        return $this->show($cart->id);
     }
 
     /**
@@ -56,7 +68,14 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        //
+        // return Cart::with('cartDetails', 'cartDetails.product',
+        // 'cartDetails.color', 'cartDetails.size')->findOrFail($id);
+
+        return Cart::with('cartDetails', 'cartDetails.product', 'cartDetails.product.colors',
+        'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
+        'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
+        'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
+        'cartDetails.color', 'cartDetails.size')->findOrFail($id);
     }
 
     /**
@@ -79,7 +98,12 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cart = $this->show($request->id);
+        $cart->customer_id = $request->customer_id;
+        $cart->is_active = 1;
+        $cart->save();
+
+        return $cart;
     }
 
     /**
@@ -90,6 +114,8 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cart = $this->show($id);
+        $cart->is_active = -1;
+        $cart->save();
     }
 }
