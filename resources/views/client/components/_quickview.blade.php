@@ -33,10 +33,10 @@
                             <div class="pr_detail">
                                 <div class="product_description">
                                     <h4 class="product_title">
-                                        <a href="#">@{{ product.product_name }}</a>
+                                        @{{ product.product_name }}
                                     </h4>
                                     <div class="product_price">
-                                        <span ng-if="!selectedColor.sale" class="price">@{{ selectedColor.price.price - selectedColor.sale.value | currency:"":0 }} VND</span>
+                                        <span ng-if="!selectedColor.sale" class="price">@{{ selectedColor.price.price | currency:"":0 }} VND</span>
                                         <span ng-if="selectedColor.sale.symbol=='K'"
                                         class="price">@{{ selectedColor.price.price - selectedColor.sale.value | currency:"":0 }} VND</span>
                                         <span ng-if="selectedColor.sale.symbol=='%'"
@@ -135,7 +135,8 @@
                                         </div>
                                     </div>
                                     <div class="cart_btn">
-                                        <button class="btn btn-fill-out btn-addtocart" type="button">
+                                        <button class="btn btn-fill-out btn-addtocart" type="button"
+                                        ng-click="addCart(product)">
                                         <i class="icon-basket-loaded"></i> Thêm vào giỏ hàng</button>
                                         <a class="add_compare" href="#"><i class="icon-shuffle"></i></a>
                                         <a class="add_wishlist" href="#"><i class="icon-heart"></i></a>

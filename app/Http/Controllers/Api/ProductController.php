@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -58,6 +60,51 @@ class ProductController extends Controller
         'brands' => Brand::where('is_active', 1)->get(),
         'suppliers' => Supplier::where('is_active', 1)->get()
         ];
+    }
+
+    public function getNew()
+    {
+        $products = Product::with('subCategory')->with('supplier')->with('brand')
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
+        ->where('is_active', 1)->orderBy('created_at', 'desc')->take(8)->get();
+        return $products;
+    }
+
+    public function getBestSeller()
+    {
+        $products = Product::
+        join('orders_detail', 'orders_detail.product_id', '=', 'product.id')
+        ->selectRaw('product.id, product.sub_category_id, product.brand_id,
+        product.supplier_id, product.product_name, SUM(orders_detail.quantity) AS quantity_sold')
+        ->where('orders_detail.is_active', 1)
+        ->groupBy('product.id', 'product.sub_category_id', 'product.brand_id',
+        'product.supplier_id', 'product.product_name') 
+        ->orderByDesc('quantity_sold')
+        ->with('subCategory')->with('supplier')->with('brand')
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
+        ->where('product.is_active', 1)
+        ->take(8)->get();
+
+        return $products;
+    }
+
+    public function getSale()
+    {
+        $products = Product::with('subCategory')->with('supplier')->with('brand')
+        ->with('colors', 'colors.sizes', 'colors.images', 'colors.price', 'colors.discounts',
+        'colors.sale', 'colors.codes')
+        ->where('is_active', 1)->take(8)->get()->toArray();
+
+        $filteredArray = Arr::where($products, function ($value, $key) {
+            $colors = $value['colors'];
+            foreach($colors as $item) {
+                return $item['sale'] != null;
+            }
+        });
+        return $filteredArray;
+        // return $products;
     }
 
     /**

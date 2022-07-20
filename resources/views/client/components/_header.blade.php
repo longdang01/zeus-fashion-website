@@ -61,7 +61,7 @@
     <div class="bottom_header dark_skin main_menu_uppercase" style="height: 70px;">
         <div class="container h-100">
             <nav class="navbar navbar-expand-lg h-100"> 
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="/">
                     <h3>Zeus<span>.</span></h3>
                     <!-- <img class="logo_light" src="/assets/client/dist/images/logo_light.png" alt="logo" />
                     <img class="logo_dark" src="/assets/client/dist/images/logo_dark.png" alt="logo" /> -->
@@ -72,7 +72,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <li><a class="nav-link nav_item active" 
-                        href="contact.html">Trang chủ</a></li> 
+                        href="/">Trang chủ</a></li> 
                         <li class="dropdown dropdown-mega-menu" ng-controller="CategoryController">
                             <a class="dropdown-toggle nav-link" href="#"
                             data-toggle="dropdown">Danh mục</a>
@@ -112,10 +112,14 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a class="nav-link nav_item" href="contact.html">Cửa hàng</a></li> 
-                        <li><a class="nav-link nav_item" href="contact.html">Tin tức</a></li> 
-                        <li><a class="nav-link nav_item" href="contact.html">Về chúng tôi</a></li> 
-                        <li><a class="nav-link nav_item" href="contact.html">Liên hệ</a></li> 
+                        <li><a class="nav-link nav_item" 
+                        href="/products">Cửa hàng</a></li> 
+                        <li><a class="nav-link nav_item" 
+                        href="javascript:;">Tin tức</a></li> 
+                        <li><a class="nav-link nav_item" 
+                        href="javascript:;">Về chúng tôi</a></li> 
+                        <li><a class="nav-link nav_item" 
+                        href="javascript:;">Liên hệ</a></li> 
                     </ul>
                 </div>
                 <ul class="navbar-nav attr-nav align-items-center">
@@ -132,19 +136,22 @@
                         </div><div class="search_overlay"></div>
                     </li>
                     <li class="dropdown cart_dropdown" ng-controller="CartController">
-                        <a class="nav-link cart_trigger" href="#" data-toggle="dropdown">
+                        <a class="nav-link cart_trigger" href="javascript:;" data-toggle="dropdown">
                             <i class="linearicons-cart"></i>
-                            <span class="cart_count">@{{ carts.cart_details.length }}</span>
+                            <span class="cart_count">@{{ totalCarts || 0 }}</span>
                         </a>
                         <div class="cart_box dropdown-menu dropdown-menu-right">
                             <ul class="cart_list">
-                                <li ng-repeat="product in carts.cart_details">
+                                <li ng-repeat="item in carts.cart_details">
                                     <a href="#" class="item_remove"
-                                    ng-click="deleteProduct(product.id)">
+                                    ng-click="deleteProduct(item.id)">
                                         <i class="ion-close"></i></a>
-                                    <a href="#"><img 
-                                    ng-src="/uploads/products/@{{ product.product_id }}/@{{ product.product.colors[0].images[0].picture }}"
-                                     alt="cart_thumb1">@{{ product.product.product_name }}</a>
+                                    <a href="/details?name=@{{ item.product.product_name | UrlFriendly }}&id=@{{ item.product_id }}"
+                                    ng-click="goDetail(item.product_id, 0)">
+                                    <img ng-src="/uploads/products/@{{ item.product.id }}/@{{ item.color.images[0].picture }}">
+                                    @{{ item.product.product_name }} 
+                                    <span style="color: grey">
+                                    (@{{ item.color.color_name }}/@{{ item.size.size_name }}/x@{{ item.quantity }})</span></a>
                                     <!-- <span class="cart_quantity"> 1 x <span class="cart_amount"> <span class="price_symbole">$</span></span>78.00</span> -->
                                 </li>
                                 
@@ -152,14 +159,16 @@
                             <div class="cart_footer">
                                 <!-- <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price"> <span class="price_symbole">$</span></span>159.00</p> -->
                                 <p class="cart_buttons">
-                                    <a href="/carts" class="btn btn-fill-out rounded-5 view-cart">Xem giỏ hàng</a>
+                                    <a href="javascript:;"
+                                     class="btn btn-fill-out rounded-5 view-cart"
+                                     ng-click="navigateToCart()">Xem giỏ hàng</a>
                                     <!-- <a href="#" class="btn btn-fill-out rounded-0 checkout">Checkout</a> -->
                                 </p>
                             </div>
                         </div>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="nav-link pr-0">
+                        <a href="/accounts" class="nav-link pr-0">
                             <i class="ti-user"></i>
                         </a>
                     </li>

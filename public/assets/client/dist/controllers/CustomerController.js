@@ -8,11 +8,11 @@ app.controller('CustomerController', function($rootScope, $scope, $http, $timeou
     const customerID = JSON.parse(sessionStorage.getItem('customerID'));
     if(customerID) {
         $scope.status = 1;
-        const getCustomer = `http://localhost:8000/api/customers/${customerID}`
+        const apiGetCustomer = `http://localhost:8000/api/customers/${customerID}`
         $http(
             {
                 method: 'GET',
-                url: getCustomer
+                url: apiGetCustomer
             }
         ).then((res) => {
             $scope.customer = res.data;

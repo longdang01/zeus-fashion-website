@@ -4,25 +4,27 @@ var app = angular.module('App',
 
 app.controller('AppController', function($rootScope, $scope, $http, $timeout, $location) {
   sessionStorage.removeItem('staffID');
+  // $('#checkBuy').trigger('change');
   $rootScope.keyword = '';
+
+  $scope.goDetail = (id, index) => {
+    sessionStorage.setItem('productID', JSON.stringify(id));
+
+    $rootScope.page = (index) ? 1 : 0;
+    $rootScope.getProduct();
+  }
+
+  $scope.navigateToCart = () => {
+    const customerID = JSON.parse(sessionStorage.getItem('customerID'));
+    if(customerID) {
+      window.open('/carts', '_self');
+    } else {
+      window.open('/login', '_self');
+    }
+  }
 
 })
 
-
-const success = () => {
-  const toastSuccess = document.getElementById('toastSuccess');
-  toastSuccess.toast('show')
-  // const toast = new bootstrap.Toast(toastSuccess);
-
-  // toast.show();
-}
-
-const error = () => {
-  const toastErr = document.getElementById('toastErr');
-  const toast = new bootstrap.Toast(toastErr);
-
-  toast.show();
-}
 
 const UrlFriendly = () => {
   return function string_to_slug(str, sep) {
@@ -43,6 +45,21 @@ const UrlFriendly = () => {
   
     return str;
   }
+}
+
+const success = () => {
+  const toastSuccess = document.getElementById('toastSuccess');
+  toastSuccess.toast('show')
+  // const toast = new bootstrap.Toast(toastSuccess);
+
+  // toast.show();
+}
+
+const error = () => {
+  const toastErr = document.getElementById('toastErr');
+  const toast = new bootstrap.Toast(toastErr);
+
+  toast.show();
 }
 
 app.directive('dateFormat', function() {

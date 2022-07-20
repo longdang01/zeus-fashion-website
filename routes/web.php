@@ -34,6 +34,8 @@ Route::get('/', function () { return view('client.home.index'); });
 Route::get('/products', function () { return view('client.products.index'); });
 Route::get('/details', function () { return view('client.details.index'); });
 Route::get('/carts', function () { return view('client.carts.index'); });
+Route::get('/accounts', function () { return view('client.accounts.index'); });
+Route::get('/checkouts', function () { return view('client.checkouts.index'); });
 
 Route::get('/products?category={category}&subCategory={subCategory}&keyword={keyword}', function ($category, $subCategory, $keyword)
 { 
@@ -50,6 +52,7 @@ Route::get('/details?name={name}&id={id}', function($name, $id) {
     'id' => $id,
     ];
 });
+
 Route::get('/login', function () { return view('client.customers.login'); });
 Route::get('/register', function () { return view('client.customers.register'); });
 

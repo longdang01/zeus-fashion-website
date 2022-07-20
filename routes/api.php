@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CartDetailController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DeliveryAddressController;
 use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\NewsController;
@@ -68,11 +69,19 @@ Route::post('upload', [apiUpload::class, 'upload']);
 Route::resource('customers', CustomerController::class);
 Route::resource('carts', CartController::class);
 Route::resource('cartDetails', CartDetailController::class);
+Route::resource('deliveryAddress', DeliveryAddressController::class);
 
 
 Route::get('product/get-products', [ProductController::class, 'getProducts']);
 Route::get('cart/get-carts/{customerID}', [CartController::class, 'getCarts']);
+Route::get('deliveryAddress/get-deliveryAddress/{customerID}', [DeliveryAddressController::class, 'getDeliveryAddress']);
+Route::get('orders/get-orders/{customerID}', [OrdersController::class, 'getOrders']);
+Route::get('product/get-new', [ProductController::class, 'getNew']);
+Route::get('product/get-best-seller', [ProductController::class, 'getBestSeller']);
+Route::get('product/get-sale', [ProductController::class, 'getSale']);
 
 // &
 Route::post('login_check', [UsersController::class, 'checkLogin']);
+Route::put('deliveryAddress/set_default/{deliveryAddressID}', [DeliveryAddressController::class, 'setDeFault']);
+Route::put('orders/revert/{ordersID}', [OrdersController::class, 'revert']);
 

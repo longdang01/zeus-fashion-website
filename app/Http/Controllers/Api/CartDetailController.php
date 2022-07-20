@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartDetail;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,12 +23,15 @@ class CartDetailController extends Controller
     }
 
     public function getCartDetail($request, $cart) {
-        return CartDetail::with('product')->with('color')->with('size')->
-        where('product_id', $request->product_id)->
-        where('color_id', $request->color_id)->
-        where('size_id', $request->size_id)->
-        where('cart_id', $cart->id)
-        ->first();
+        return CartDetail::with('product', 'product.colors', 'product.colors.sizes')
+        ->with('color', 'color.sizes')->with('size')
+        ->where([
+            ['product_id', '=', $request->product_id],
+            ['color_id', '=', $request->color_id],
+            ['size_id', '=', $request->size_id],
+            ['cart_id', '=', $cart->id],
+            ['is_active', '<>', -1]
+        ])->first();
     }
     /**
      * Show the form for creating a new resource.
@@ -57,11 +61,8 @@ class CartDetailController extends Controller
         } 
 
         $cartDetail = $this->getCartDetail($request, $cart);
-        if($cartDetail) {
-            $request->quantity += $cartDetail->quantity; 
-        } else {
-            $cartDetail = new CartDetail();
-        }
+        if($cartDetail) $request->quantity += $cartDetail->quantity; 
+        else $cartDetail = new CartDetail();
         
         $cartDetail->cart_id = $cart->id;
         $cartDetail->product_id = $request->product_id;
@@ -71,7 +72,6 @@ class CartDetailController extends Controller
         $cartDetail->is_active = 0;
 
         $cartDetail->save();
-
         return $this->show($cartDetail->id);
     }
 
@@ -83,7 +83,8 @@ class CartDetailController extends Controller
      */
     public function show($id)
     {
-        return CartDetail::with('product')->with('color')->with('size')
+        return CartDetail::with('product', 'product.colors', 'product.colors.sizes', 'product.colors.sale', 'product.colors.price', 'product.colors.images')
+        ->with('color', 'color.sizes', 'color.images', 'color.price', 'color.sale')->with('size')
         ->where([
             ['is_active', '<>', -1],
             ['id', '=', $id]

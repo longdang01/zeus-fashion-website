@@ -20,7 +20,7 @@ class CartController extends Controller
         'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
         'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
         'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
-        'cartDetails.color', 'cartDetails.size')
+        'cartDetails.color', 'cartDetails.color.images', 'cartDetails.color.price', 'cartDetails.color.sale', 'cartDetails.size')
         ->where('is_active', 1)];
     }
 
@@ -30,7 +30,7 @@ class CartController extends Controller
         'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
         'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
         'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
-        'cartDetails.color', 'cartDetails.size')
+        'cartDetails.color', 'cartDetails.color.images', 'cartDetails.color.price', 'cartDetails.color.sale', 'cartDetails.size')
         ->where('customer_id', $customer_id)->first();
     }
 
@@ -75,7 +75,7 @@ class CartController extends Controller
         'cartDetails.product.colors.sizes', 'cartDetails.product.colors.images',
         'cartDetails.product.colors.discounts', 'cartDetails.product.colors.price',
         'cartDetails.product.colors.sale', 'cartDetails.product.colors.codes',
-        'cartDetails.color', 'cartDetails.size')->findOrFail($id);
+        'cartDetails.color', 'cartDetails.color.images', 'cartDetails.color.price', 'cartDetails.color.sale', 'cartDetails.size')->findOrFail($id);
     }
 
     /**

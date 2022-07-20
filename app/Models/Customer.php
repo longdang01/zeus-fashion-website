@@ -17,7 +17,8 @@ class Customer extends Model
     } 
 
     public function deliveryAddress() {
-        return $this->hasMany(DeliveryAddress::class, 'customer_id', 'id');
+        return $this->hasMany(DeliveryAddress::class, 'customer_id', 'id')
+        ->where('is_active', '!=', -1);;
     }
 
 }

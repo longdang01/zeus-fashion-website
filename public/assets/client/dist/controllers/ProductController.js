@@ -24,6 +24,40 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         }
     }
 
+    const apiGetNew = 'http://localhost:8000/api/product/get-new';
+    $http(
+    {
+        method: 'GET',
+        url: apiGetNew,
+    }
+    ).then((res) => {
+        $rootScope.productsNew = res.data;
+
+    }, (err) => console.log(err))
+
+    const apiGetBestSeller = 'http://localhost:8000/api/product/get-best-seller';
+    $http(
+    {
+        method: 'GET',
+        url: apiGetBestSeller,
+    }
+    ).then((res) => {
+        $rootScope.productsBestSeller = res.data;
+            
+    }, (err) => console.log(err))
+
+    const apiGetSale = 'http://localhost:8000/api/product/get-sale';
+    $http(
+    {
+        method: 'GET',
+        url: apiGetSale,
+    }
+    ).then((res) => {
+        $rootScope.productsSale = res.data;
+        console.log(res.data);
+            
+    }, (err) => console.log(err))
+
     /** api/products/get */
     const apiGetProducts = `http://localhost:8000/api/product/get-products`;
     $scope.getProducts = () => {
@@ -59,38 +93,57 @@ app.controller('ProductController', function($rootScope, $scope, $http, $timeout
         return (arr.length) ? 'show' : '';
     }
 
-    $scope.goDetail = (id, index) => {
-        sessionStorage.setItem('productID', JSON.stringify(id));
 
-        $rootScope.page = (index) ? 1 : 0;
-        $rootScope.getProduct();
-    }
+    /** goDetail() */
 
     $scope.addCart = (product) => {
         const customerID = JSON.parse(sessionStorage.getItem('customerID'));
 
+        $scope.product = product;
+        $scope.selectedColor = product.colors[0];
+        $scope.selectedSize = product.colors[0].sizes[0];
+        const qty = 1;
+
         if(customerID) {
 
-            const apiAddCart = `http://127.0.0.1:8000/api/cartDetails`; 
-            $http({
-                method: 'POST',
-                url: apiAddCart,
-                data: 
-                { 
-                    customer_id: customerID,
-                    product_id: product.id,
-                    color_id: product.colors[0].id,
-                    size_id: product.colors[0].sizes[0].id,
-                    quantity: 1,
-                },
-                "content-Type": "application/json"
-            }).then((res) => {
-                console.log(res.data);
-                
-            }, (err) => console.log(err));
+            if($scope.checkQuantity(qty)) {
+                const apiAddCart = `http://127.0.0.1:8000/api/cartDetails`; 
+                $http({
+                    method: 'POST',
+                    url: apiAddCart,
+                    data: 
+                    { 
+                        customer_id: customerID,
+                        product_id: product.id,
+                        color_id: $scope.selectedColor.id,
+                        size_id: $scope.selectedSize.id,
+                        quantity: 1,
+                    },
+                    "content-Type": "application/json"
+                }).then((res) => {
+                    $rootScope.getCarts();
+    
+                }, (err) => console.log(err));
+            }
         } else window.open('/login', '_self');
     }
-    
+
+    $scope.checkQuantity = (qty) => {
+        const inCart = ($rootScope.carts.cart_details) ?
+        $rootScope.carts.cart_details.filter(item => item.product_id = $scope.product.id &&
+        item.color_id == $scope.selectedColor.id && item.size_id == $scope.selectedSize.id) : [];
+        
+        let totalInCart = (inCart[0]) ? Number(inCart[0].quantity) + Number(qty) : 0;
+
+        if(qty <= 0 || qty > $scope.selectedSize.quantity) {
+            alert(`Số lượng [1, ${$scope.selectedSize.quantity}]`);
+            return false;
+        } else if(totalInCart > $scope.selectedSize.quantity) {
+            alert(`Đã có ${inCart[0].quantity} sản phẩm trong giỏ hàng - Số lượng [1, ${$scope.selectedSize.quantity}]`);
+            return false;
+            
+        } else return true;
+    }
     
     $scope.hoverInColor = ($event, color) => {
         const imgHover = $($event.currentTarget).parents('.product').find('.product__img-hover');

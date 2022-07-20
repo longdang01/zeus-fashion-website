@@ -103,7 +103,7 @@
                                         </a>
                                     </h6>
                                     <div class="product_price">
-                                        <span ng-if="!product.colors[0].sale" class="price">@{{ product.colors[0].price.price - product.colors[0].sale.value | currency:"":0 }} VND</span>
+                                        <span ng-if="!product.colors[0].sale" class="price">@{{ product.colors[0].price.price | currency:"":0 }} VND</span>
                                         <span ng-if="product.colors[0].sale.symbol=='K'"
                                         class="price">@{{ product.colors[0].price.price - product.colors[0].sale.value | currency:"":0 }} VND</span>
                                         <span ng-if="product.colors[0].sale.symbol=='%'"

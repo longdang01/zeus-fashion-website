@@ -40,6 +40,51 @@ app.controller('DetailController', function($rootScope, $scope, $http, $timeout)
     
     $rootScope.getProduct();
 
+    $scope.addCart = (product) => {
+        const customerID = JSON.parse(sessionStorage.getItem('customerID'));
+        const qty = $('.qty').val();
+        
+        if(customerID) {
+
+            if($scope.checkQuantity(qty)) {
+                const apiAddCart = `http://127.0.0.1:8000/api/cartDetails`; 
+                $http({
+                    method: 'POST',
+                    url: apiAddCart,
+                    data: 
+                    { 
+                        customer_id: customerID,
+                        product_id: product.id,
+                        color_id: $scope.selectedColor.id,
+                        size_id: $scope.selectedSize.id,
+                        quantity: qty,
+                    },
+                    "content-Type": "application/json"
+                }).then((res) => {
+                    $rootScope.getCarts();
+    
+                }, (err) => console.log(err));
+            }
+        } else window.open('/login', '_self');
+    }
+
+    $scope.checkQuantity = (qty) => {
+        const inCart = ($rootScope.carts.cart_details) ?
+        $rootScope.carts.cart_details.filter(item => item.product_id = $scope.product.id &&
+        item.color_id == $scope.selectedColor.id && item.size_id == $scope.selectedSize.id) : [];
+        
+        let totalInCart = (inCart[0]) ? Number(inCart[0].quantity) + Number(qty) : 0;
+
+        if(qty <= 0 || qty > $scope.selectedSize.quantity) {
+            alert(`Số lượng [1, ${$scope.selectedSize.quantity}]`);
+            return false;
+        } else if(totalInCart > $scope.selectedSize.quantity) {
+            alert(`Đã có ${inCart[0].quantity} sản phẩm trong giỏ hàng - Số lượng [1, ${$scope.selectedSize.quantity}]`);
+            return false;
+            
+        } else return true;
+    }
+
     $scope.changeColor = (item, index) => {
         $scope.selectedColor = item;
 
@@ -62,10 +107,6 @@ app.controller('DetailController', function($rootScope, $scope, $http, $timeout)
     $scope.changeSize = (item, index) => {
         $scope.selectedSize = item;
     };
-
-    $scope.addCart = () => {
-
-    }
 
     const destroySlick = () => {
         const gallery = $('.quickview__gallery');

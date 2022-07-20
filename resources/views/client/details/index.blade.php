@@ -138,7 +138,8 @@
                                         </div>
                                     </div>
                                     <div class="cart_btn">
-                                        <button class="btn btn-fill-out btn-addtocart" type="button">
+                                        <button class="btn btn-fill-out btn-addtocart" type="button"
+                                        ng-click="addCart(product)">
                                             <i class="icon-basket-loaded"></i> Thêm vào giỏ hàng</button>
                                         <a class="add_compare" href="#"><i class="icon-shuffle"></i></a>
                                         <a class="add_wishlist" href="#"><i class="icon-heart"></i></a>

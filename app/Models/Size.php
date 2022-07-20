@@ -11,6 +11,13 @@ class Size extends Model
 
     protected $table = 'size';
 
-    
+    public function updateSize($item, $action) {
+        
+        $size = Size::findOrFail($item['size_id']);
+
+        $size->quantity = ($action === 1)
+        ? $size->quantity - $item['quantity'] : $size->quantity + $item['quantity'];
+        $size->save();  
+    }
 
 }

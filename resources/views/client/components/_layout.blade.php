@@ -142,6 +142,10 @@
     <script src="/assets/client/dist/controllers/DetailController.js"></script>
     <script src="/assets/client/dist/controllers/CustomerController.js"></script>
     <script src="/assets/client/dist/controllers/CartController.js"></script>
+    <script src="/assets/client/dist/controllers/AccountController.js"></script>
+    <script src="/assets/client/dist/controllers/DeliveryAddressController.js"></script>
+    <script src="/assets/client/dist/controllers/CheckoutController.js"></script>
+    <script src="/assets/client/dist/controllers/OrdersController.js"></script>
 
 </body>
 </html>
